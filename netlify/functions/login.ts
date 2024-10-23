@@ -14,7 +14,9 @@ const googleAuthClient = new OAuth2Client(VITE_GOOGLE_OAUTH_CLIENT_ID);
 const firebaseAdminCredential = {
   credential: firebaseAdmin.credential.cert({
     clientEmail: FIREBASE_ADMIN_CLIENT_EMAIL,
-    privateKey: FIREBASE_ADMIN_PRIVATE_KEY,
+    privateKey: FIREBASE_ADMIN_PRIVATE_KEY
+      ? FIREBASE_ADMIN_PRIVATE_KEY.replace(/\\n/g, "\n")
+      : undefined,
     projectId: FIREBASE_ADMIN_PROJECT_ID,
   }),
   //   databaseURL: "https://joe-blog-fake.firebaseio.com/",
