@@ -3,11 +3,11 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import Login from "./pages/Login";
 
-import { google } from "./config";
+import config from "./config";
 
 function App() {
   return (
-    <GoogleOAuthProvider clientId={google.OAUTH_CLIENT_ID}>
+    <GoogleOAuthProvider clientId={config.google.OAUTH_CLIENT_ID}>
       <Router>
         <Routes>
           <Route path="/" element={<Login />} />
