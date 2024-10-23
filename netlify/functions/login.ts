@@ -1,11 +1,15 @@
 import { Config, Context } from "@netlify/functions";
 import firebaseAdmin from "firebase-admin";
+import { OAuth2Client } from "google-auth-library";
 
 const {
   FIREBASE_ADMIN_CLIENT_EMAIL,
   FIREBASE_ADMIN_PRIVATE_KEY,
   FIREBASE_ADMIN_PROJECT_ID,
+  VITE_GOOGLE_OAUTH_CLIENT_ID,
 } = process.env;
+
+const googleAuthClient = new OAuth2Client(VITE_GOOGLE_OAUTH_CLIENT_ID);
 
 const firebaseAdminCredential = {
   credential: firebaseAdmin.credential.cert({
@@ -42,6 +46,20 @@ export default async (req: Request, context: Context) => {
       status: 401,
     });
   }
+
+  const ticket = await googleAuthClient
+    .verifyIdToken({
+      idToken: googleToken,
+      audience: VITE_GOOGLE_OAUTH_CLIENT_ID,
+    })
+    .catch(() => null);
+
+  if (!ticket)
+    return createResponse({
+      message: "Unauthorized",
+      token: null,
+      status: 401,
+    });
 
   const firebaseCustomToken = "1234567";
 
