@@ -34,17 +34,20 @@ const createResponse = ({ status, ...body }) =>
     headers: { "Content-Type": "application/json" },
   });
 
+const createUnauthorizedResponse = () =>
+  createResponse({
+    message: "Unauthorized",
+    token: null,
+    status: 401,
+  });
+
 export default async (req: Request, context: Context) => {
   const body: RequestBody = await req.json();
 
   const { token: googleToken } = body;
 
   if (!googleToken) {
-    return createResponse({
-      message: "Unauthorized",
-      token: null,
-      status: 401,
-    });
+    return createUnauthorizedResponse();
   }
 
   const ticket = await googleAuthClient
@@ -54,12 +57,7 @@ export default async (req: Request, context: Context) => {
     })
     .catch(() => null);
 
-  if (!ticket)
-    return createResponse({
-      message: "Unauthorized",
-      token: null,
-      status: 401,
-    });
+  if (!ticket) return createUnauthorizedResponse();
 
   const firebaseCustomToken = "1234567";
 
