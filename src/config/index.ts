@@ -1,6 +1,6 @@
 export default {
   google: {
-    OAUTH_CLIENT_ID: import.meta.env.GOOGLE_OAUTH_CLIENT_ID,
+    oAuthClientId: import.meta.env.VITE_GOOGLE_OAUTH_CLIENT_ID,
   },
   firebase: {},
 };
