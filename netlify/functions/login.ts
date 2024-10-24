@@ -73,7 +73,13 @@ export default async (req: Request, context: Context) => {
     .get();
 
   if (userSnapshot.empty) return createUnauthorizedResponse();
-  const firebaseCustomToken = "1234567";
+
+  const userDoc = userSnapshot.docs[0];
+  //   const user = userDoc.data();
+
+  const firebaseCustomToken = await firebaseAdmin
+    .auth()
+    .createCustomToken(userDoc.id);
 
   return createResponse({
     message: "Success",
