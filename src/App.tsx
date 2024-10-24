@@ -1,9 +1,9 @@
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
-import Login from "./pages/Login";
+import Login from "@/pages/Login";
 
-import config from "./config";
+import config from "@/config";
 
 function App() {
   return (
