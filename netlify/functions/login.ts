@@ -19,12 +19,13 @@ const firebaseAdminCredential = {
       : undefined,
     projectId: FIREBASE_ADMIN_PROJECT_ID,
   }),
-  //   databaseURL: "https://joe-blog-fake.firebaseio.com/",
 };
 
 if (!firebaseAdmin.apps.length) {
   firebaseAdmin.initializeApp(firebaseAdminCredential);
 }
+
+const firestoreAdmin = firebaseAdmin.firestore();
 
 interface RequestBody {
   token?: string;
@@ -61,6 +62,17 @@ export default async (req: Request, context: Context) => {
 
   if (!ticket) return createUnauthorizedResponse();
 
+  const userGoogleId = ticket.getUserId();
+  const userGoogleEmail = ticket.getPayload()?.email;
+
+  if (!userGoogleId || !userGoogleEmail) return createUnauthorizedResponse();
+
+  const userSnapshot = await firestoreAdmin
+    .collection("users")
+    .where("email", "==", userGoogleEmail)
+    .get();
+
+  if (userSnapshot.empty) return createUnauthorizedResponse();
   const firebaseCustomToken = "1234567";
 
   return createResponse({
