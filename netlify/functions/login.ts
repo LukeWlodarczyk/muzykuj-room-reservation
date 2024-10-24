@@ -75,11 +75,11 @@ export default async (req: Request, context: Context) => {
   if (userSnapshot.empty) return createUnauthorizedResponse();
 
   const userDoc = userSnapshot.docs[0];
-  //   const user = userDoc.data();
+  const user = userDoc.data();
 
   const firebaseCustomToken = await firebaseAdmin
     .auth()
-    .createCustomToken(userDoc.id);
+    .createCustomToken(userDoc.id, { access: user.access });
 
   return createResponse({
     message: "Success",
