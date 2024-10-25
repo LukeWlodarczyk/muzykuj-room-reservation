@@ -62,14 +62,13 @@ export default async (req: Request, context: Context) => {
 
   if (!ticket) return createUnauthorizedResponse();
 
-  const userGoogleId = ticket.getUserId();
-  const userGoogleEmail = ticket.getPayload()?.email;
+  const userTicket = ticket.getPayload();
 
-  if (!userGoogleId || !userGoogleEmail) return createUnauthorizedResponse();
+  if (!userTicket?.email) return createUnauthorizedResponse();
 
   const userSnapshot = await firestoreAdmin
     .collection("users")
-    .where("email", "==", userGoogleEmail)
+    .where("email", "==", userTicket.email)
     .get();
 
   if (userSnapshot.empty) return createUnauthorizedResponse();
@@ -77,9 +76,25 @@ export default async (req: Request, context: Context) => {
   const userDoc = userSnapshot.docs[0];
   const user = userDoc.data();
 
+  const authUser = await firebaseAdmin
+    .auth()
+    .getUser(userDoc.id)
+    .catch((error) => {
+      if (error.code === "auth/user-not-found") {
+        const newAuthUser = firebaseAdmin.auth().createUser({
+          uid: userDoc.id,
+          email: userTicket.email,
+          displayName: userTicket.name,
+        });
+        return newAuthUser;
+      }
+
+      throw error;
+    });
+
   const firebaseCustomToken = await firebaseAdmin
     .auth()
-    .createCustomToken(userDoc.id, { access: user.access });
+    .createCustomToken(authUser.uid, { access: user.access });
 
   return createResponse({
     message: "Success",
@@ -90,5 +105,5 @@ export default async (req: Request, context: Context) => {
 
 export const config: Config = {
   method: "POST",
-  path: "/api/login",
+  path: "/api/login/token",
 };
