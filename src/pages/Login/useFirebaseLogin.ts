@@ -1,10 +1,10 @@
 import { CredentialResponse } from "@react-oauth/google";
+import { useNavigate } from "react-router-dom";
 
 import { getFirebaseCustomToken } from "@/api/auth";
 import { signInWithCustomToken } from "@/services/firebase/auth";
 
 import useLoginProcessStatus from "./useLoginProcessStatus";
-import { useNavigate } from "react-router-dom";
 
 const action = <T>(
   request: () => Promise<T>,
