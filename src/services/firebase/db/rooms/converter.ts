@@ -1,5 +1,4 @@
 import {
-  collection,
   DocumentData,
   FirestoreDataConverter,
   QueryDocumentSnapshot,
@@ -7,12 +6,7 @@ import {
   WithFieldValue,
 } from "firebase/firestore";
 
-import { firestore } from "@/services/firebase/db";
-
-export type Room = {
-  id: string;
-  name: string;
-};
+import { Room } from "./types";
 
 export const roomConverter: FirestoreDataConverter<Room> = {
   toFirestore(room: WithFieldValue<Room>): DocumentData {
@@ -29,7 +23,3 @@ export const roomConverter: FirestoreDataConverter<Room> = {
     };
   },
 };
-
-export const roomsCollection = collection(firestore, "rooms").withConverter(
-  roomConverter
-);
