@@ -1,47 +1,11 @@
 import {
-  and,
-  collection,
   DocumentData,
   FirestoreDataConverter,
-  or,
-  query,
   QueryDocumentSnapshot,
   SnapshotOptions,
-  Timestamp,
-  where,
   WithFieldValue,
 } from "firebase/firestore";
-
-import { firestore } from "@/services/firebase/db";
-
-import { getCurrentWeekMondayDate } from "@/helpers/date";
-
-export enum EventType {
-  WEEKLY = "WEEKLY",
-  CUSTOM = "CUSTOM",
-}
-
-function assertUnreachable<T>(_: T | never, message: string): never {
-  throw new Error(message);
-}
-
-export type Event = {
-  id: string;
-  hour: number;
-  ownerId: string;
-  ownerName: string;
-  roomId: string;
-} & (
-  | {
-      type: EventType.WEEKLY;
-      startDate: Timestamp;
-      endDate: Timestamp | null;
-    }
-  | {
-      type: EventType.CUSTOM;
-      date: Timestamp;
-    }
-);
+import { assertUnreachable, Event, EventType } from "./types";
 
 export const eventConverter: FirestoreDataConverter<Event> = {
   toFirestore(event: WithFieldValue<Event>): DocumentData {
@@ -111,25 +75,3 @@ export const eventConverter: FirestoreDataConverter<Event> = {
     }
   },
 };
-
-export const eventsCollection = query(
-  collection(firestore, "events").withConverter(eventConverter),
-  or(
-    and(
-      where("type", "==", EventType.CUSTOM),
-      where("date", ">=", Timestamp.fromDate(getCurrentWeekMondayDate()))
-    ),
-    and(
-      where("type", "==", EventType.WEEKLY),
-      or(
-        where(
-          "startDate",
-          ">=",
-          Timestamp.fromDate(getCurrentWeekMondayDate())
-        ),
-        where("endDate", ">=", Timestamp.fromDate(getCurrentWeekMondayDate())),
-        where("endDate", "==", null)
-      )
-    )
-  )
-);
