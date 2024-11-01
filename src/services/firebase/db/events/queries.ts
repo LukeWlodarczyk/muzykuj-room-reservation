@@ -1,9 +1,9 @@
 import { and, or, query } from "firebase/firestore";
 import { CUSTOM_EVENT, WEEKLY_EVENT } from "./clauses";
-import { eventsCollection } from "./collection";
+import { eventsCollectionRef } from "./refs";
 
 export const currentAndFutureEventsQuery = query(
-  eventsCollection,
+  eventsCollectionRef,
   or(
     and(CUSTOM_EVENT.TYPE, CUSTOM_EVENT.CURRENT_WEEK_OR_FUTURE),
     and(
