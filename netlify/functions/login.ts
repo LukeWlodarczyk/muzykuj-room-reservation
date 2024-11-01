@@ -85,6 +85,7 @@ export default async (req: Request, context: Context) => {
           uid: userDoc.id,
           email: userTicket.email,
           displayName: userTicket.name,
+          photoURL: userTicket.picture,
         });
         return newAuthUser;
       }
