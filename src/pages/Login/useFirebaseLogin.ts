@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { getFirebaseCustomToken } from "@/api/auth";
 import { signInWithCustomToken } from "@/services/firebase/auth";
+import { paths } from "@/router";
 
 import useLoginProcessStatus from "./useLoginProcessStatus";
 
@@ -50,7 +51,7 @@ const useFirebaseLogin = () => {
 
     loginProcess.setSignedIn();
 
-    navigate("/rooms");
+    navigate(paths.RESERVATIONS);
   };
 
   return {
