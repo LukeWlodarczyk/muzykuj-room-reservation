@@ -10,12 +10,10 @@ type Props = {
 };
 
 const AppHeader: FC<Props> = ({ user }) => (
-  <header
-    className="w-full h-14 px-4  flex justify-between items-center rounded-full"
-  >
+  <header className="flex h-14 w-full items-center justify-between rounded-full px-4">
     <h1>
       <Link to={paths.RESERVATIONS}>
-        <img src={logo} className="size-28 -ml-4" />
+        <img src={logo} className="-ml-4 size-28" />
       </Link>
     </h1>
     <nav>
@@ -23,14 +21,14 @@ const AppHeader: FC<Props> = ({ user }) => (
         <li>
           <Link
             to={paths.SETTINGS}
-            className="group h-full pl-4 flex items-center"
+            className="group flex h-full items-center pl-4"
           >
             <span className="mr-4 text-sm font-medium tracking-wide text-brand-black group-hover:underline">
               {user.displayName}
             </span>
             <img
               src={user.photoURL || ""}
-              className="size-10 rounded-full border border-gray-200 group-hover:scale-110 duration-300"
+              className="size-10 rounded-full border border-gray-200 duration-300 group-hover:scale-110"
             />
           </Link>
         </li>
