@@ -12,9 +12,11 @@ type AuthContextType = {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-export const AuthProvider: FC<{
+type Props = {
   children: ReactNode;
-}> = ({ children }) => {
+};
+
+export const AuthProvider: FC<Props> = ({ children }) => {
   const [user, loading, error] = useAuthState(auth);
 
   return (

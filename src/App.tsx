@@ -1,6 +1,6 @@
 import Router from "@/router";
 
-import { AuthProvider } from "@/context/auth";
+import { AuthProvider } from "@/features/common/context/auth";
 
 function App() {
   return (
