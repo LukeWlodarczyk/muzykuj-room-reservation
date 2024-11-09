@@ -11,6 +11,9 @@ export default {
         "dark-brand-blue": "#81d1f8",
         "brand-black": "#27272a",
       },
+      size: {
+        "login-logo": "17.5rem",
+      },
     },
   },
   plugins: [],
