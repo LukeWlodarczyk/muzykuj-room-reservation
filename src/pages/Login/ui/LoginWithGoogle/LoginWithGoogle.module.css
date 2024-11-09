@@ -1,0 +1,39 @@
+.googleLogin {
+  iframe {
+    display: none !important;
+  }
+
+  > div > div:first-child > div {
+    animation: reveal 0.6s;
+    width: 320px;
+    height: 40px;
+    border: none;
+    background-color: transparent;
+
+    &:hover,
+    &:focus,
+    &:active {
+      background-color: transparent;
+    }
+
+    > div:first-child {
+      position: unset;
+    }
+  }
+
+  > div > div:first-child span {
+    font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+      "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  }
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
