@@ -106,5 +106,4 @@ export default async (req: Request, context: Context) => {
 
 export const config: Config = {
   method: "POST",
-  path: "/api/login/token",
 };

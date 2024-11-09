@@ -6,7 +6,7 @@ type CustomTokenResponse = {
 
 export const getFirebaseCustomToken = async (googleCredential: string) =>
   axios
-    .post<CustomTokenResponse>("/api/login/token", {
+    .post<CustomTokenResponse>("/.netlify/functions/login", {
       token: googleCredential,
     })
     .then((response) => response.data.token);
