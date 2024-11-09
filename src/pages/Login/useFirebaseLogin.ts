@@ -20,6 +20,7 @@ const action = <T>(
 
 const useFirebaseLogin = () => {
   const loginProcess = useLoginProcessStatus();
+
   const navigate = useNavigate();
 
   const initialize = async ({
@@ -50,8 +51,6 @@ const useFirebaseLogin = () => {
     if (!credential) return;
 
     loginProcess.setSignedIn();
-
-    navigate(paths.RESERVATIONS);
   };
 
   return {
@@ -61,6 +60,7 @@ const useFirebaseLogin = () => {
       setGoogleAuthenticatingError: loginProcess.setGoogleAuthenticatingError,
       setGoogleAuthenticating: loginProcess.setGoogleAuthenticating,
     },
+    navigate: () => navigate(paths.RESERVATIONS),
   };
 };
 
