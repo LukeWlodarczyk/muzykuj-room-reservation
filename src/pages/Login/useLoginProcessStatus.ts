@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-enum Status {
+export enum Status {
   IDLE = "IDLE",
   GOOGLE_AUTHENTICATING = "GOOGLE_AUTHENTICATING",
   GOOGLE_AUTHENTICATING_ERROR = "GOOGLE_AUTHENTICATING_ERROR",
@@ -13,9 +13,28 @@ enum Status {
 
 const useLoginProcessStatus = () => {
   const [status, setStatus] = useState<Status>(Status.IDLE);
+
+  const setIdle = () => setStatus(Status.IDLE);
+
+  const isGoogleAuthenticating = status === Status.GOOGLE_AUTHENTICATING;
+
+  // when app regains focus during Status.GOOGLE_AUTHENTICATING that means user closed google login popup without authentication
+  useEffect(() => {
+    if (status === Status.GOOGLE_AUTHENTICATING) {
+      window.addEventListener("focus", setIdle);
+    }
+
+    return () => {
+      if (status === Status.GOOGLE_AUTHENTICATING) {
+        window.removeEventListener("focus", setIdle);
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isGoogleAuthenticating]);
+
   return {
     status,
-    setIdle: () => setStatus(Status.IDLE),
+    setIdle,
     setGoogleAuthenticating: () => setStatus(Status.GOOGLE_AUTHENTICATING),
     setGoogleAuthenticatingError: () =>
       setStatus(Status.GOOGLE_AUTHENTICATING_ERROR),
