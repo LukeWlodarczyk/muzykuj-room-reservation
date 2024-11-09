@@ -1,6 +1,6 @@
 import { Timestamp, where } from "firebase/firestore";
 
-import { getStartOfCurrentWeekDate } from "@/helpers/date";
+import { getStartOfCurrentWeekDate } from "@/features/reservations/utils/date";
 
 import { EventType } from "./types";
 

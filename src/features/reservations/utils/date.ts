@@ -5,3 +5,4 @@ dayjs.extend(isoWeek);
 
 export const getStartOfCurrentWeekDate = () =>
   dayjs().isoWeekday(1).startOf("day").toDate();
+

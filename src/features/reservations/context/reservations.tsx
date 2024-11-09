@@ -5,13 +5,13 @@ import {
   useCollectionDataOnce,
 } from "react-firebase-hooks/firestore";
 
-import { Room, roomsCollection } from "@/services/firebase/db/rooms";
+import { Room, roomsCollectionRef } from "@/features/reservations/db/rooms";
 import {
   Event,
   currentAndFutureEventsQuery,
-} from "@/services/firebase/db/events";
+} from "@/features/reservations/db/events";
 
-type ReservationsContextType = {
+export type ReservationsContextType = {
   rooms: {
     value: Room[];
     isLoading: boolean;
@@ -30,7 +30,7 @@ export const ReservationsProvider: FC<{
   children: ReactNode;
 }> = ({ children }) => {
   const [rooms = [], roomsIsLoading, roomsError] =
-    useCollectionDataOnce<Room>(roomsCollection);
+    useCollectionDataOnce<Room>(roomsCollectionRef);
 
   const [events = [], eventsIsLoading, eventsError] = useCollectionData<Event>(
     currentAndFutureEventsQuery

@@ -1,4 +1,5 @@
 import { and, or, query } from "firebase/firestore";
+
 import { CUSTOM_EVENT, WEEKLY_EVENT } from "./clauses";
 import { eventsCollectionRef } from "./refs";
 
