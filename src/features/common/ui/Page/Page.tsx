@@ -27,6 +27,7 @@ const Page: FC<Props> = ({ children, className, hasBlur = false }) => (
         hasBlur && "blur-3xl"
       )}
     ></div>
+    <div className="bg-noise fixed left-0 top-0 -z-10 h-full w-full opacity-30"></div>
     {children}
   </section>
 );
