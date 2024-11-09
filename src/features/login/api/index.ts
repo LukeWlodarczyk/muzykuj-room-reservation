@@ -1,0 +1,1 @@
+export { getFirebaseCustomToken } from "./auth";

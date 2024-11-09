@@ -1,11 +1,12 @@
-import { CredentialResponse } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
 
-import { getFirebaseCustomToken } from "@/api/auth";
-import { signInWithCustomToken } from "@/services/firebase/auth";
-import { paths } from "@/router";
+import { CredentialResponse } from "@react-oauth/google";
 
-import useLoginProcessStatus from "./useLoginProcessStatus";
+import { getFirebaseCustomToken } from "@/features/login/api";
+import { signInWithCustomToken } from "@/features/login/actions";
+import useLoginProcessStatus from "@/features/login/hooks/useLoginProcessStatus";
+
+import { paths } from "@/router";
 
 const action = <T>(
   request: () => Promise<T>,

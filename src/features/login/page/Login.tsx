@@ -1,14 +1,14 @@
 import { FC, ReactNode, useMemo } from "react";
 
-import Page from "@/ui/Page/Page";
-import LoginWithGoogle from "./ui/LoginWithGoogle";
-import LoginProcessAnimation from "./ui/LoginProcessAnimation";
+import Page from "@/features/common/ui/Page";
 
-import useFirebaseLogin from "./useFirebaseLogin";
+import LoginWithGoogle from "@/features/login/ui/LoginWithGoogle";
+import LoginProcessAnimation from "@/features/login/ui/LoginProcessAnimation";
 
-import { Status } from "./useLoginProcessStatus";
+import useFirebaseLogin from "@/features/login/hooks/useFirebaseLogin";
+import { Status } from "@/features/login/hooks/useLoginProcessStatus";
 
-import logo from "./logo.svg";
+import logo from "@/features/login/assets/logo.svg";
 
 const createSteps = <K, V>(steps: [K, V][]) => new Map<K, V>([...steps]);
 
