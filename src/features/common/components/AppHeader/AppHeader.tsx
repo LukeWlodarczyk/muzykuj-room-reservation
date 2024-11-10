@@ -5,6 +5,8 @@ import { User } from "firebase/auth";
 import { paths } from "@/router";
 import logo from "./logo.svg";
 
+import Avatar from "@/features/common/ui/Avatar";
+
 type Props = {
   user: User;
 };
@@ -26,9 +28,10 @@ const AppHeader: FC<Props> = ({ user }) => (
             <span className="mr-4 text-sm font-medium tracking-wide text-brand-black group-hover:underline">
               {user.displayName}
             </span>
-            <img
-              src={user.photoURL || ""}
-              className="size-10 rounded-full border border-gray-200 duration-300 group-hover:scale-110"
+            <Avatar
+              photoURL={user.photoURL}
+              displayName={user.displayName}
+              className="duration-300 group-hover:scale-110"
             />
           </Link>
         </li>
