@@ -14,6 +14,9 @@ export default {
       size: {
         "login-logo": "17.5rem",
       },
+      backgroundImage: {
+        noise: "url('src/features/common/assets/noise.png')",
+      },
     },
   },
   plugins: [],
