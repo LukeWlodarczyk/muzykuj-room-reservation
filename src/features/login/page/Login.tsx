@@ -44,11 +44,7 @@ const Login: FC = () => {
       className="flex h-dvh max-h-dvh flex-col items-center justify-center"
       hasBlur
     >
-      <img
-        className="size-login-logo mb-10 rounded-full"
-        src={logo}
-        alt="Muzykuj logo"
-      />
+      <Logo className="mb-10" />
       <LoginProcessAnimation
         status={login.process.status}
         labels={STEPS}
