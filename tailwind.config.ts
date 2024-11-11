@@ -15,7 +15,7 @@ export default {
         "login-logo": "17.5rem",
       },
       backgroundImage: {
-        noise: "url('src/features/common/assets/noise.png')",
+        noise: "url('/src/features/common/assets/noise.png')",
       },
     },
   },
