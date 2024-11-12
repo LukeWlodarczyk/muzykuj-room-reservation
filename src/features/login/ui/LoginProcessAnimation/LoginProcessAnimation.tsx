@@ -25,10 +25,10 @@ const LoginProcessAnimation = <T extends string>({
   labels,
   onFinish,
 }: Props<T>) => (
-  <div className="relative h-10 w-80 rounded-2xl border border-[#dadce0] bg-white shadow-2xl">
+  <div className="relative h-10 w-80 overflow-hidden rounded-2xl border border-[#dadce0] bg-white shadow-2xl">
     {!isFirstOrLast(status, labels) && (
       <motion.div
-        className="absolute z-40 h-10 w-px bg-gradient-to-b from-transparent via-cyan-500 to-transparent"
+        className="pointer-events-none absolute z-40 h-10 w-px bg-gradient-to-b from-transparent via-cyan-500 to-transparent"
         animate={{
           x: [0, 316],
           width: [3, 1, 3],
