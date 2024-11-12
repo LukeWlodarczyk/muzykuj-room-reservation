@@ -1,47 +1,21 @@
-import { FC, ReactNode, useMemo } from "react";
+import { FC } from "react";
 
 import Page from "@/features/common/ui/Page";
 
-import LoginWithGoogle from "@/features/login/ui/LoginWithGoogle";
 import LoginProcessAnimation from "@/features/login/ui/LoginProcessAnimation";
+import Logo from "@/features/login/ui//Logo";
 
 import useFirebaseLogin from "@/features/login/hooks/useFirebaseLogin";
-import { Status } from "@/features/login/hooks/useLoginProcessStatus";
-
-import logo from "@/features/login/assets/logo.svg";
-
-const createSteps = <K, V>(steps: [K, V][]) => new Map<K, V>([...steps]);
-
-const steps: [Status, ReactNode][] = [
-  [Status.GOOGLE_AUTHENTICATING, "Autoryzacja użytkownika"],
-  [Status.VERIFYING, "Weryfikacja użytkownika"],
-  [Status.SIGNING_IN, "Logowanie użytkownika"],
-  [Status.SIGNED_IN, "Zalogowano"],
-];
+import useLoginSteps from "@/features/login/hooks/useLoginSteps";
 
 const Login: FC = () => {
   const login = useFirebaseLogin();
 
-  const STEPS = useMemo(
-    () =>
-      createSteps([
-        [
-          Status.IDLE,
-          <LoginWithGoogle
-            onClick={login.process.setGoogleAuthenticating}
-            onSuccess={login.initialize}
-            onError={login.process.setGoogleAuthenticatingError}
-          />,
-        ],
-        ...steps,
-      ]),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
+  const STEPS = useLoginSteps(login);
 
   return (
     <Page
-      className="flex h-dvh max-h-dvh flex-col items-center justify-center"
+      className="flex h-dvh max-h-dvh flex-col items-center justify-center p-4"
       hasBlur
     >
       <Logo className="mb-10" />

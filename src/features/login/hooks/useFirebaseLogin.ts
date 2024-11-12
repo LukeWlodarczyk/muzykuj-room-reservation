@@ -58,8 +58,9 @@ const useFirebaseLogin = () => {
     initialize,
     process: {
       status: loginProcess.status,
-      setGoogleAuthenticatingError: loginProcess.setGoogleAuthenticatingError,
+      setIdle: loginProcess.setIdle,
       setGoogleAuthenticating: loginProcess.setGoogleAuthenticating,
+      setGoogleAuthenticatingError: loginProcess.setGoogleAuthenticatingError,
     },
     navigate: () => navigate(paths.RESERVATIONS),
   };
