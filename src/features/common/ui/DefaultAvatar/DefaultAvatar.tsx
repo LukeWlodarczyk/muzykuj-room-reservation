@@ -12,7 +12,7 @@ const DefaultAvatar: FC<Props> = ({ className, name }) => (
   <div
     className={twMerge(
       className,
-      "flex items-center justify-center bg-dark-brand-blue"
+      "flex aspect-square items-center justify-center bg-dark-brand-blue text-brand-black"
     )}
   >
     {(name || DEFAULT_DISPLAY_NAME).at(0)}
