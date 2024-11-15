@@ -1,107 +1,54 @@
-import { Config, Context } from "@netlify/functions";
-import firebaseAdmin from "firebase-admin";
-import { OAuth2Client } from "google-auth-library";
-
-const {
-  FIREBASE_ADMIN_CLIENT_EMAIL,
-  FIREBASE_ADMIN_PRIVATE_KEY,
-  FIREBASE_ADMIN_PROJECT_ID,
-  VITE_GOOGLE_OAUTH_CLIENT_ID,
-} = process.env;
-
-const googleAuthClient = new OAuth2Client(VITE_GOOGLE_OAUTH_CLIENT_ID);
-
-const firebaseAdminCredential = {
-  credential: firebaseAdmin.credential.cert({
-    clientEmail: FIREBASE_ADMIN_CLIENT_EMAIL,
-    privateKey: FIREBASE_ADMIN_PRIVATE_KEY
-      ? FIREBASE_ADMIN_PRIVATE_KEY.replace(/\\n/g, "\n")
-      : undefined,
-    projectId: FIREBASE_ADMIN_PROJECT_ID,
-  }),
-};
-
-if (!firebaseAdmin.apps.length) {
-  firebaseAdmin.initializeApp(firebaseAdminCredential);
-}
-
-const firestoreAdmin = firebaseAdmin.firestore();
+import { Config } from "@netlify/functions";
+import { createResponse, createUnauthorizedResponse } from "../utils/response";
+import * as google from "../utils/googleAuth";
+import * as adminAuth from "../utils/firebase/auth";
+import * as firestoreAdmin from "../utils/firebase/firestore/users";
 
 interface RequestBody {
   token?: string;
 }
 
-const createResponse = ({ status, ...body }) =>
-  new Response(JSON.stringify(body), {
-    status,
-    headers: { "Content-Type": "application/json" },
-  });
+export default async (req: Request) => {
+  try {
+    const body: RequestBody = await req.json();
 
-const createUnauthorizedResponse = () =>
-  createResponse({
-    message: "Unauthorized",
-    token: null,
-    status: 401,
-  });
+    const { token: googleToken } = body;
 
-export default async (req: Request, context: Context) => {
-  const body: RequestBody = await req.json();
+    if (!googleToken) return createUnauthorizedResponse();
 
-  const { token: googleToken } = body;
+    const payload = await google.verifyToken(googleToken);
 
-  if (!googleToken) {
-    return createUnauthorizedResponse();
-  }
+    if (!(payload && payload.email)) return createUnauthorizedResponse();
 
-  const ticket = await googleAuthClient
-    .verifyIdToken({
-      idToken: googleToken,
-      audience: VITE_GOOGLE_OAUTH_CLIENT_ID,
-    })
-    .catch(() => null);
+    const user = await firestoreAdmin.getUserByEmail(payload.email);
 
-  if (!ticket) return createUnauthorizedResponse();
+    if (!user) return createUnauthorizedResponse();
 
-  const userTicket = ticket.getPayload();
-
-  if (!userTicket?.email) return createUnauthorizedResponse();
-
-  const userSnapshot = await firestoreAdmin
-    .collection("users")
-    .where("email", "==", userTicket.email)
-    .get();
-
-  if (userSnapshot.empty) return createUnauthorizedResponse();
-
-  const userDoc = userSnapshot.docs[0];
-  const user = userDoc.data();
-
-  const authUser = await firebaseAdmin
-    .auth()
-    .getUser(userDoc.id)
-    .catch((error) => {
-      if (error.code === "auth/user-not-found") {
-        const newAuthUser = firebaseAdmin.auth().createUser({
-          uid: userDoc.id,
-          email: userTicket.email,
-          displayName: userTicket.name,
-          photoURL: userTicket.picture,
-        });
-        return newAuthUser;
-      }
-
-      throw error;
+    const authUser = await adminAuth.getOrCreateAuthUser({
+      id: user.id,
+      email: payload.email,
+      name: payload.name,
+      picture: payload.picture,
     });
 
-  const firebaseCustomToken = await firebaseAdmin
-    .auth()
-    .createCustomToken(authUser.uid, { access: user.access });
+    const firebaseCustomToken = await adminAuth.createCustomToken(
+      authUser.uid,
+      {
+        access: user.access,
+      }
+    );
 
-  return createResponse({
-    message: "Success",
-    token: firebaseCustomToken,
-    status: 200,
-  });
+    return createResponse({
+      message: "Success",
+      token: firebaseCustomToken,
+      status: 200,
+    });
+  } catch (error) {
+    return createResponse({
+      status: 500,
+      message: `Unknown error: ${error.message}`,
+    });
+  }
 };
 
 export const config: Config = {
