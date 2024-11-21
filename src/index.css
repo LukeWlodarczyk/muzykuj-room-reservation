@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .noise-layer {
+    @apply relative before:absolute before:left-0 before:top-0 before:h-full before:w-full before:bg-noise before:opacity-30;
+  }
+}
+
 body {
   background-color: theme(colors.light-brand-purple);
 }
