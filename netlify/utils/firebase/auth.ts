@@ -26,3 +26,12 @@ export const getOrCreateAuthUser = (user: User) =>
 
 export const createCustomToken: BaseAuth["createCustomToken"] = (uid, claims) =>
   authAdmin.createCustomToken(uid, claims);
+
+export const verifyToken = async (req) => {
+  const authHeader = req.headers.get("authorization") || "";
+  const token = authHeader.replace("Bearer ", "");
+
+  const decodedToken = await authAdmin.verifyIdToken(token).catch(() => null);
+
+  return decodedToken;
+};
