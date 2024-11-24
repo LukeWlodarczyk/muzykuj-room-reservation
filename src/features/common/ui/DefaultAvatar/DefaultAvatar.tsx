@@ -15,7 +15,7 @@ const DefaultAvatar: FC<Props> = ({ className, name }) => (
       "flex aspect-square items-center justify-center bg-dark-brand-blue text-brand-black"
     )}
   >
-    {(name || DEFAULT_DISPLAY_NAME).at(0)}
+    {(name || DEFAULT_DISPLAY_NAME).at(0)?.toUpperCase()}
   </div>
 );
 
